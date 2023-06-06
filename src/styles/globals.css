@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  scroll-behavior: smooth;
+  /* overflow-x: hidden; */
+  max-height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: rgb(249, 254, 255);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  object-fit: cover;
+}
+
+label {
+  font-weight: 500;
+}
+
+.form-group select:focus,.form-group textarea:focus{
+  outline: 0;
+  border-color: none;
+  box-shadow: none;
+}
+
+@import url(./mainlayout.css);
+@import url(./login.css);
+@import url(./loading.css);
+@import url(./product.css);
+@import url(./productItem.css);
+@import url(./cart.css);
+@import url(./shipping.css);
+@import url(./myaccount.css);

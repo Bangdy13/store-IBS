@@ -1,0 +1,24 @@
+.form-container {
+  max-width: 400px;
+  margin: auto;
+}
+.form-group {
+  margin-bottom: 5px;
+}
+
+.form-group input:focus {
+  outline: 0;
+  border-color: none;
+  box-shadow: none;
+}
+
+.cards {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.links {
+  text-decoration: none;
+  margin-left: 5px;
+  color: blue;
+  border: none;
+}

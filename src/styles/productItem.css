@@ -1,0 +1,31 @@
+.breadcrumb-item a {
+  text-decoration: none;
+  color: orangered;
+}
+.detail_page .img-thumbnail.active {
+  border-color: orangered;
+  padding: 2px;
+}
+.detail_page .detail_price {
+  color: orangered;
+  font-size: 20px;
+}
+.detail_page .inStock {
+  color: rgb(0, 190, 0);
+  font-weight: 600;
+  font-size: 20px;
+}
+.detail_page .outStock {
+  color: rgb(167, 167, 167);
+  font-weight: 600;
+  font-size: 20px;
+}
+.detail_page .accordion-body {
+  text-align: justify;
+}
+.detail_page .text-button {
+  font-size: 18px;
+}
+.detail_page .product_name {
+  font-size: 24px;
+}
