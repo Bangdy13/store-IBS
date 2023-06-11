@@ -10,7 +10,7 @@ export default function SingleProduct(props) {
   const [product] = useState(props.product);
   const [tab, setTab] = useState(0);
   const { state, dispatch } = useContext(DataContext);
-  const { cart } = state;
+  const { cart, auth } = state;
 
   const isActive = (index) => {
     if (tab === index) return " active";
@@ -27,7 +27,6 @@ export default function SingleProduct(props) {
                 <a>Home</a>
               </Link>
             </li>
-
             <li
               className="breadcrumb-item active text-capitalize"
               aria-current="page"
@@ -127,17 +126,19 @@ export default function SingleProduct(props) {
                 </div>
               </div>
             </div>
-            <div className="mt-4">
-              <button
-                type="button"
-                disabled={product.inStock === 0 ? true : false}
-                className="btn button-cart w-25 px-2 py-2 text-button"
-                onClick={() => dispatch(AddToCart(product, cart))}
-              >
-                <i className="bi bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-            </div>
+            {auth.user?.role === "admin" ? null : (
+              <div className="mt-4">
+                <button
+                  type="button"
+                  disabled={product.inStock === 0 ? true : false}
+                  className="btn button-cart w-25 px-2 py-2 text-button"
+                  onClick={() => dispatch(AddToCart(product, cart))}
+                >
+                  <i className="bi bi-cart-fill me-1"></i>
+                  Add to cart
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

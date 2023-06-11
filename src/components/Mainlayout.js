@@ -101,7 +101,7 @@ const Mainlayout = ({ children, title }) => {
                 id="navbarSupportedContent"
               >
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
-                  {auth?.user?.role === "user" ? (
+                  {auth.user?.role !== "admin" ? (
                     <li className="nav-item">
                       <Link href={"/cart"} className="nav-link">
                         <i className="bi bi-cart-fill me-1"></i>

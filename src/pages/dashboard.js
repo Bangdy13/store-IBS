@@ -2,10 +2,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 import CreateCategories from "@/components/CreateCategories";
+import FilterSearch from "@/components/FilterSearch";
 import Mainlayout from "@/components/Mainlayout";
+import ProductItem from "@/components/ProductItem";
 import { UpdateItem } from "@/store/Actions";
 import { DataContext } from "@/store/GlobalContext";
-import { patchData } from "@/utils/fetchData";
+import { getData, patchData } from "@/utils/fetchData";
+import filterSearch from "@/utils/filterSearch";
 import { imageUpload } from "@/utils/imageUpload";
 import validation from "@/utils/validation";
 import dynamic from "next/dynamic";
@@ -14,7 +17,9 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-function DashboardUserPage() {
+function MultiDashboard(props) {
+  const [products, setProducts] = useState(props.products);
+
   const initialState = { avatar: "", name: "", password: "", cf_password: "" };
   const [data, setData] = useState(initialState);
   const { avatar, name, password, cf_password } = data;
@@ -23,6 +28,16 @@ function DashboardUserPage() {
   const { auth, notify, orders, users } = state;
 
   const router = useRouter();
+  const [isCheck, setIsCheck] = useState(false);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setProducts(props.products);
+  }, [props.products]);
+
+  useEffect(() => {
+    if (Object.keys(router.query).length === 0) setPage(1);
+  }, [router.query]);
 
   useEffect(() => {
     if (auth.user) {
@@ -164,6 +179,41 @@ function DashboardUserPage() {
       dispatch({ type: "NOTIFY", payload: { success: res.msg } });
       return toast.success(res.msg);
     });
+  };
+
+  const handleChecked = (id) => {
+    products.forEach((product) => {
+      if (product._id === id) product.checked = !product.checked;
+    });
+    setProducts([...products]);
+  };
+
+  const handleCheckedAll = () => {
+    products.forEach((product) => {
+      product.checked = !isCheck;
+    });
+    setProducts([...products]);
+    setIsCheck(!isCheck);
+  };
+
+  const handleDeleteAllProduct = () => {
+    let deleteArr = [];
+    products.forEach((product) => {
+      if (product.checked) {
+        deleteArr.push({
+          data: "",
+          id: product._id,
+          name: "Apa anda ingin hapus semua produknya?",
+          type: "DELETE_TO_PRODUCT",
+        });
+      }
+    });
+    dispatch({ type: "DEL_TO_MODAL", payload: deleteArr });
+  };
+
+  const handleViewProductAll = () => {
+    setPage(page + 1);
+    filterSearch({ router, page: page + 1 });
   };
 
   if (!auth.user) return null;
@@ -604,6 +654,59 @@ function DashboardUserPage() {
                       <i className="bi bi-plus-lg"></i> Create product
                     </button>
                     <hr />
+                    <div>
+                      <FilterSearch state={state} />
+                    </div>
+
+                    <div
+                      className="delete_all btn bg-danger d-flex align-items-center mx-0 py-0"
+                      style={{ maxWidth: "16%" }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isCheck}
+                        onChange={handleCheckedAll}
+                        style={{
+                          height: "25px",
+                          width: "25px",
+                        }}
+                      />
+                      <button
+                        className="btn btn-danger text-white ms-2 fw-semibold py-1 my-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        onClick={handleDeleteAllProduct}
+                      >
+                        Delete all
+                      </button>
+                    </div>
+                    <div className="text-end my-2">
+                      {props.result < page * 3 ? (
+                        ""
+                      ) : (
+                        <a
+                          style={{ cursor: "pointer", color: "blue" }}
+                          className="fw-normal"
+                          onClick={handleViewProductAll}
+                        >
+                          View all product
+                          <i className="bi bi-chevron-compact-right"></i>
+                        </a>
+                      )}
+                    </div>
+                    <div className="d-flex flex-wrap content-product">
+                      {products.length === 0 ? (
+                        <h2>Product not found</h2>
+                      ) : (
+                        products.map((product) => (
+                          <ProductItem
+                            key={product._id}
+                            product={product}
+                            handleChecked={handleChecked}
+                          />
+                        ))
+                      )}
+                    </div>
                   </div>
                 )}
                 {/* ACCOUNT */}
@@ -704,6 +807,18 @@ function DashboardUserPage() {
     </Mainlayout>
   );
 }
-export default dynamic(() => Promise.resolve(DashboardUserPage), {
+export const getServerSideProps = async ({ query }) => {
+  const page = query.page || 1;
+  const category = query.category || "all";
+  const sort = query.sort || "";
+  const search = query.search || "all";
+
+  const res = await getData(
+    `product?limit=${page * 3}&category=${category}&sort=${sort}&name=${search}`
+  );
+  return { props: { products: res.products, result: res.result } };
+};
+
+export default dynamic(() => Promise.resolve(MultiDashboard), {
   ssr: false,
 });

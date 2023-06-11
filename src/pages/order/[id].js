@@ -72,20 +72,22 @@ export default function OrderDetailPage() {
                   <div className="col-lg-12" key={item._id}>
                     <hr className="mb-1" />
                     <div className="d-flex border-bottom py-2">
-                      <Link href={`/product/${item._id}`}>
-                        <img
-                          src={item.image[0].url}
-                          alt="product"
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
-                            cursor: "pointer",
-                          }}
-                          className="img-thumbnail"
-                        />
-                      </Link>
-                      <div className="ms-3">
+                      <div className="col-md-2">
+                        <Link href={`/product/${item._id}`}>
+                          <img
+                            src={item.image[0].url}
+                            alt="product"
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                              cursor: "pointer",
+                            }}
+                            className="img-thumbnail"
+                          />
+                        </Link>
+                      </div>
+                      <div className="col-md-10">
                         <h5 style={{ fontWeight: "normal" }}>{item.name}</h5>
                         <div className="d-flex align-items-center justify-content-between">
                           <h6
@@ -98,10 +100,7 @@ export default function OrderDetailPage() {
                               maximumSignificantDigits: 3,
                             }).format(item.price)}
                           </h6>
-                          <h6
-                            style={{ fontWeight: "normal" }}
-                            className="text-end"
-                          >
+                          <h6 style={{ fontWeight: "normal" }}>
                             x{item.quantity}
                           </h6>
                         </div>
