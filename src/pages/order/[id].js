@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 import Mainlayout from "@/components/Mainlayout";
+import ManualBtn from "@/components/ManualBtn";
 import PaypalBtn from "@/components/paypalBtn";
 import { DataContext } from "@/store/GlobalContext";
 import Link from "next/link";
@@ -221,12 +222,15 @@ export default function OrderDetailPage() {
                     // onClick={() => router.push("signin?redirect=/shipping")}
                   >
                     {!order.isPaid && auth.user.role !== "admin" && (
-                      <PaypalBtn
-                        itemsPrice={order.itemsPrice}
-                        shippingPrice={order.shippingPrice}
-                        totalPrice={order.totalPrice}
-                        order={order}
-                      />
+                      <>
+                        <ManualBtn order={order} />
+                        <PaypalBtn
+                          itemsPrice={order.itemsPrice}
+                          shippingPrice={order.shippingPrice}
+                          totalPrice={order.totalPrice}
+                          order={order}
+                        />
+                      </>
                     )}
                   </div>
                 </div>
